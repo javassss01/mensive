@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>buat pacarku hehe</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/typeit@8.7.0/dist/index.umd.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap');
+
+        :root {
+            --pink-soft: #ffdde1;
+            --pink-bright: #ffafbd;
+            --teks-color: #d63384;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--pink-soft), var(--pink-bright));
+            height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; position: relative;
+        }
+
+        .bg-animate {
+            position: absolute; width: 100%; height: 100%;
+            top: 0; left: 0; z-index: 0; pointer-events: none;
+        }
+
+        .heart {
+            position: absolute; color: white; font-size: 20px;
+            animation: float 6s linear infinite; opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px; border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.3);
+            text-align: center; z-index: 10; border: 4px solid white;
+            max-width: 350px; width: 90%; backdrop-filter: blur(5px);
+        }
+
+        #stiker { width: 130px; height: 130px; margin-bottom: 15px; }
+
+        h1 { font-family: 'Fredoka One', cursive; color: var(--teks-color); margin-bottom: 10px; font-size: 1.5rem; }
+
+        #teks { font-size: 1.1rem; color: #666; min-height: 50px; line-height: 1.4; }
+
+        .btn-mulai {
+            background: var(--teks-color); color: white;
+            border: none; padding: 12px 30px; border-radius: 50px;
+            font-family: 'Fredoka One', cursive; cursor: pointer;
+            transition: transform 0.2s; margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(214, 51, 132, 0.4);
+        }
+
+        .btn-mulai:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animate" id="bg-animate"></div>
+
+    <div class="card">
+        <img id="stiker" src="https://feeldreams.github.io/bunga.gif">
+        <h1 id="judul">pencet Tombolnya! ✨</h1>
+        <div id="teks">ada pesan rahasia buat kamu nih</div>
+        <button id="btn" class="btn-mulai" onclick="mulai()">Klik Aku! 💖</button>
+    </div>
+<audio id="linkLagu" src="seasons.mp3" preload="auto" loop></audio>
+
+
+    <script>
+        // 1. Animasi Background
+        function createHeart() {
+            const container = document.getElementById('bg-animate');
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤️','💖','✨','🌸'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            container.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+        setInterval(createHeart, 300);
+
+        // 2. Fungsi Utama (FIXED)
+        async function mulai() {
+            const musik = document.getElementById('linkLagu'); // Fix ID
+            
+            // Putar Musik
+            musik.play().catch(e => console.log("Musik butuh klik manual"));
+
+            document.getElementById('btn').style.display = 'none';
+            document.getElementById('judul').innerHTML = "Buat Pacarku ✨";
+            document.getElementById('teks').innerHTML = "";
+
+            new TypeIt("#teks", {
+                strings: [
+                    "hai kamu!",
+                    "iya kamu🫵",
+                    "aku cuman mau bilang",
+                    "happy mensinve yang ke 7 bulan ya sayang", 
+                    "makasih yaa udah bertahan sejauh ini!", 
+                   "aku tau ini hadiah emang gada harganya, tapi cinta aku ke kamu tulus apa adanya",
+                   "makasih ya sayang udah hadir di hidup aku",
+                   "aku seneng banget bisa pacaran sama kamu!",
+                   "aku bangga sama kamu karna udah bisa sejaun ini!",
+                    "I Love You Sayang, Aku sayang banget sama kamu! "
+                    
+                ],
+                speed: 50,
+                breakLines: false,
+                afterComplete: function() {
+                    tanyaPesan();
+                }
+            }).go();
+        }
+
+        // 3. Pop up Akhir
+        async function tanyaPesan() {
+            const { value: pesan } = await Swal.fire({
+                title: 'Kirim pesan balik?',
+                input: 'text',
+                confirmButtonText: 'Kirim'
+            });
+
+            if (pesan) {
+                const noWA = "6281912733875"; // GANTI NOMOR WA LU
+                window.location.href = `https://api.whatsapp.com/send?phone=${noWA}&text=Ayang, ini balasanku: ${pesan}`;
+            }
+        }
+    </script>
+</body>
+</html>
